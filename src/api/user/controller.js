@@ -1,8 +1,9 @@
-const generateToken = require('./jwt');
+const jwt = require('./jwt');
 const repository = require('./repository');
 const crypto = require('crypto');
 
-exports.register = async (req, res) => {
+/*exports.register = async (req, res) => {
+    // 사용자 정보 검증 로직
     try{
         const userInfo = {id : 1, name: '홍길동'};
         const token = await generateToken(userInfo);
@@ -10,7 +11,7 @@ exports.register = async (req, res) => {
     }catch(error){
         res.status(500).json({result:"error", message: "토큰 발급실패"});
     }
-}
+}*/
 
 exports.login = async (req, res) => {
     const { phone, password } = req.body;
@@ -27,7 +28,7 @@ result.toString('base64'));
         const data = await jwt({ id: item.id, name: item.name });
         res.send({ result: 'ok', access_token: data })
     }
-    }
+}
 
 exports.register = async (req, res) => {
     const { phone, password, name } = req.body;
@@ -51,11 +52,35 @@ repository.register(phone, result.toString('base64'), name);
     }
 }
 
+exports.show = async ( req, res) => {
+    const user = req.user;
+
+    const item = await repository.findId(user.id);
+    if(item == null){
+        res.send({result: 'fail' , message: '회원을 찾을 수 없습니다.'});
+    } else {
+        res.send({result: 'ok', data: item});
+    }
+}
+
+exports.update = async (req, res) => {
+    const {name, profile_id} = req.body;
+    const user = req.user;
+
+    const result = await repository.update(user.id, name, profile_id);
+    if(result.affectedRows > 0){
+        const item = await repository.findId(user.id);
+        res.send({result: 'ok', data:item});
+    } else {
+        res.send({result:'fail', message: '오류가 발생하였습니다.'});
+    }
+}
+
 exports.phone = (req, res) => {
     const now = new Date();
-    
-now.setMinutes(now.getMinutes() + 3);
-    const expiredTime = now.toISOString().replace('T', '').substring(0, 19);
+
+    now.setMinutes(now.getMinutes() + 3);
+    const expiredTime = now.toISOString().replace('T', ' ').substring(0, 19);
     
     res.json({ result: 'ok', expired: expiredTime });
 }
@@ -68,4 +93,4 @@ exports.phoneVerify = (req, res) => {
         return;
     }
     res.json({ result: "fail", message: "인증번호가 맞지않습니다." });
-    }
+}
