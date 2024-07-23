@@ -25,13 +25,13 @@ router.put('/auth/phone', apiUserController.phoneVerify);
 router.post('/auth/register', apiUserController.register);
 router.post('/auth/login', apiUserController.login);
 
+router.use(authenticateToken);
+
 router.get('/api/feed', apiFeedController.index);
 router.post('/api/feed', apiFeedController.store);
 router.get('/api/feed/:id', apiFeedController.show);
 router.put('/api/feed/:id', apiFeedController.update);
 router.delete('/api/feed/:id', apiFeedController.delete);
-
-router.use(authenticateToken);
 
 router.get('/api/user/my', authenticateToken, apiUserController.show);
 router.post('api/user/my', authenticateToken, apiUserController.update);    

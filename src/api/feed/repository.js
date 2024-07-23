@@ -3,20 +3,19 @@ const { pool } = require('../../database')
 exports.index = async (page, size, keyword) => {
     const offset = (page - 1) * size;
 
-    let query = `SELECT feed.*, u.name AS user_name, image_id
-FROM feed
-LEFT JOIN user u ON u.id = feed.user_id
+    let query = `SELECT feed.*, u.name AS user_name, image_id FROM feed
+    LEFT JOIN user u ON u.id = feed.user_id
     LEFT JOIN files f ON feed.image_id = f.id`;
 
     const params = [];
 
     if (keyword) {
-query += ` WHERE LOWER(feed.title) LIKE ? OR
-LOWER(feed.content) LIKE ?`;
+    query += ` WHERE LOWER(feed.title) LIKE ? OR
+    LOWER(feed.content) LIKE ?`;
         const keywordParam = `%${keyword}%`;
         params.push(keywordParam, keywordParam);
     }
-
+    
     query += ` ORDER BY feed.id DESC LIMIT ? OFFSET ?`;
     params.push(size, offset);
 

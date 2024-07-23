@@ -39,10 +39,10 @@ exports.register = async (req, res) => {
         return res.send({ result: "fail", message: '중복된 이메일이 존재합니다.' });
     }
     const result = await crypto.pbkdf2Sync(password,
-process.env.SALT_KEY, 50, 100, 'sha512')
+    process.env.SALT_KEY, 50, 100, 'sha512')
     
     const { affectedRows, insertId } = await
-repository.register(phone, result.toString('base64'), name);
+    repository.register(phone, result.toString('base64'), name);
     
     if (affectedRows > 0) {
         const data = await jwt({ id: insertId, name });

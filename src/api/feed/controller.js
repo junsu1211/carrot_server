@@ -20,8 +20,8 @@ exports.store = async (req, res) => {
     const body = req.body;
     const user = req.user;
 
-    const result = await repository.create(user.id, body.imageId, body.title,
-body.content, body.price);
+    const result = await repository.create(user.id, body.title, body.content,
+body.price, body.imageId);
     if (result.affectedRows > 0) {
         res.send({ result: 'ok', data: result.insertId });
     } else {
