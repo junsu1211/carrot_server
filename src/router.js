@@ -20,10 +20,10 @@ router.use(logRequestTime);
 router.post('/file', upload.single('file'), fileController.upload); // 파일 업로드 요청
 router.get('file/:id', fileController.download); // 파일 정보 검색, 파일을 클라이언트에게 전송                                                                                                                                                      
 
-router.post('/api/phone', apiUserController.phone);
-router.put('/api/phone', apiUserController.phoneVerify);
-router.post('/api/register', apiUserController.register);
-router.post('/api/login', apiUserController.login);
+router.post('/auth/phone', apiUserController.phone);
+router.put('/auth/phone', apiUserController.phoneVerify);
+router.post('/auth/register', apiUserController.register);
+router.post('/auth/login', apiUserController.login);
 
 router.get('/api/feed', apiFeedController.index);
 router.post('/api/feed', apiFeedController.store);
