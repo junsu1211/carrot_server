@@ -1,4 +1,5 @@
 const mysql = require('mysql2/promise');
+
 exports.pool = mysql.createPool(
     {
         host: process.env.DB_HOST,
@@ -10,6 +11,7 @@ exports.pool = mysql.createPool(
         queueLimit: 0
     }
 );
+
 exports.pool.query = async (queryString, params) => {
     const [results] = await this.pool.execute(queryString, params);
     return results;

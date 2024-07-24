@@ -10,8 +10,8 @@ exports.index = async (page, size, keyword) => {
     const params = [];
 
     if (keyword) {
-    query += ` WHERE LOWER(feed.title) LIKE ? OR
-    LOWER(feed.content) LIKE ?`;
+    query += ` WHERE LOWER(feed.title) LIKE ?
+    OR LOWER(feed.content) LIKE ?`;
         const keywordParam = `%${keyword}%`;
         params.push(keywordParam, keywordParam);
     }
@@ -28,8 +28,8 @@ exports.create = async (user, title, content, price, image) => {
     VALUES (?,?,?,?,?)`;
     // image가 undefined인 경우 null로 설정
     const imageId = image === undefined ? null : image;
-    return await pool.query(query, [user, title, content, price,
-imageId]);
+
+    return await pool.query(query, [user, title, content, price, imageId]);
 }
     
 exports.show = async (id) => {
